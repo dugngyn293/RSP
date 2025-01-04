@@ -15,6 +15,41 @@ def insert(root, data):
         else:
             root.right = insert(root.right, data)
     return root
+def delete(root, data):
+    if root is None:
+        return root
+
+    # Traverse the tree to find the node to delete
+    if data < root.data:
+        root.left = delete(root.left, data)
+    elif data > root.data:
+        root.right = delete(root.right, data)
+    else:
+        # Node to be deleted found
+
+        # Case 1: No child
+        if root.left is None and root.right is None:
+            return None
+
+        # Case 2: One child
+        if root.left is None:
+            return root.right
+        if root.right is None:
+            return root.left
+
+        # Case 3: Two children
+        # Find the in-order successor (smallest in the right subtree)
+        successor = find_min(root.right)
+        root.data = successor.data  # Replace the data with the successor's data
+        root.right = delete(root.right, successor.data)  # Delete the successor
+
+    return root
+
+def find_min(node):
+    current = node
+    while current.left:
+        current = current.left
+    return current
 
 def print_inorder(root):
     if root:
